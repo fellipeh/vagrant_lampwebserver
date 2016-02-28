@@ -1,0 +1,110 @@
+# VM settings
+vagrant:
+  box: precise64.box
+  box_url: http://files.vagrantup.com/precise64.box
+  box_port: 8088
+  box_port_ssl: 8043
+  box_ip: 10.0.0.28
+  ssh_shell: bash -c 'BASH_ENV=/etc/profile exec bash'
+  ssh_username: vagrant
+  vm_name: webserver
+  vm_memory: 512
+  vm_cpu: 80
+  vm_webroot: www
+  vm_docroot: /var/www
+  vm_hostname: localhost
+
+# Packages to install before anything else via apt-get.
+syspackages:
+  - build-essential
+  - openssl
+  - unzip
+  - git
+  - curl
+  - php5-dev
+  - php-pear
+  - libyaml-dev
+  - libgnutls-openssl27
+  - libgnutls26
+  - ssmtp
+
+# Settings for Apache default modules.
+apachemodules:
+  - rewrite
+  - ssl
+phpmodules:
+  - php5-cli
+  - php5-mysql
+  - php5-sqlite
+  - php5-imagick
+  - php5-mcrypt
+  - php5-imap
+  - php5-curl
+  - php5-gd
+  - php5-xmlrpc
+  - php5-xdebug
+  - libapache2-mod-php5
+
+# Setting MySQL Database --> user: "root". password: "vagrant"
+mysql:
+  port: 8089
+  password: vagrant
+
+# Create SSL certificate
+ssl:
+  country: BR
+  state: Minas Gerais
+  city: Muriae
+  company: Pythian
+  section: DevOps Team
+  domain: 127.0.0.1
+  email: fellipeh@gmail.com
+
+# Set PHP to display erros (only in Developer mode)
+errors:
+  - display_errors = On
+  - error_reporting = E_ALL
+  - display_startup_errors = On
+  - log_errors = On
+  - log_errors_max_len = 1024
+  - ignore_repeated_errors = Off
+  - ignore_repeated_source = Off
+  - report_memleaks = On
+  - html_errors = On
+  - docref_root = "http://www.php.net/manual/en/"
+  - docref_ext = .php
+  - error_log = /var/log/php_errors.log
+  - error_prepend_string = "<span style='color:red'>"
+  - error_append_string = "</span>"
+xdebug:
+  - zend_extension = xdebug.so
+  - xdebug.remote_enable = 1
+  - xdebug.remote_host = localhost
+  - xdebug.remote_port = 9000
+  - xdebug.remote_connect_back = 1
+  - xdebug.remote_handler = dbgp
+  - xdebug.remote_mode = req
+  - xdebug.remote_log = /var/log/php5-xdebug.log
+  - xdebug.profiler_enable = 0
+  - xdebug.profiler_output_dir = /tmp
+  - xdebug.profiler_output_name = cachegrind.out.%t.%p
+
+# Apache rules
+directory:
+  - Options Indexes FollowSymLinks MultiViews
+  - AllowOverride All
+  - Order allow,deny
+  - Allow from all
+
+# Virtual Hosts
+vhosts:
+  -
+    ServerName: localhost
+    ServerAlias: localhost.dev www.localhost.dev default default.dev www.default.dev
+    DocumentRoot: /var/www/default
+    ServerAdmin: webmaster@localhost
+  -
+    ServerName: dev
+    ServerAlias: dev.dev www.dev.dev
+    DocumentRoot: /var/www
+    ServerAdmin: webmaster@localhost
